@@ -43,27 +43,45 @@ apiClient.verify.ping()
 apiClient.customer.convert({
   email: 'test@example.com',
   cart_data: {
-    cart_value: 10000,
-    cart_item_count: 1,
+    cart_value: 20000,
+    cart_item_count: 2,
     promo: 'COUPON_CODE',
     return_url: 'https://www.example.com/return_url',
     ...
   },
-  cart_items: {
-    product_id: 'example',
-    name: 'Example Product',
-    price: 10000,
-    description: 'Information about Example Product.',
-    category: [
-      'Example Category 1',
-      'Example Category 2',
-    ],
-    item_qty: 1,
-    qty_price: 10000,
-    product_url: 'https://www.example.com/products/example',
-    image_url: 'https://www.example.com/products/example/images/example.jpg',
+  cart_items: [
+    {
+      product_id: 'example',
+      name: 'Example Product',
+      price: 10000,
+      description: 'Information about Example Product.',
+      category: [
+        'Example Category 1',
+        'Example Category 2',
+      ],
+      item_qty: 1,
+      qty_price: 10000,
+      product_url: 'https://www.example.com/products/example',
+      image_url: 'https://www.example.com/products/example/images/example.jpg',
+      ...
+    },
+    {
+      product_id: 'example2',
+      name: 'Example Product 2',
+      price: 10000,
+      description: 'Information about Example Product 2.',
+      category: [
+        'Example Category 2',
+        'Example Category 3',
+      ],
+      item_qty: 1,
+      qty_price: 10000,
+      product_url: 'https://www.example.com/products/example2',
+      image_url: 'https://www.example.com/products/example2/images/example.jpg',
+      ...
+    },
     ...
-  },
+  ],
 })
   .then(...)
   .catch(...)
