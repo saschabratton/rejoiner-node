@@ -129,6 +129,14 @@ apiClient.lists.contacts('eXaMpLeLiStId').get()
   .catch(...)
 ````
 
+#### With optional page number for pagination
+
+````js
+apiClient.lists.contacts('eXaMpLeLiStId').get(2)
+  .then(...)
+  .catch(...)
+````
+
 ### Add Customer to List
 
 ````js
