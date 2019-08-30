@@ -1,7 +1,7 @@
 {
   "name": "rejoiner2",
   "description": "Rejoiner2 REST API client wrapper for Node.js",
-  "version": "2.4.3",
+  "version": "2.5.0",
   "main": "lib/rejoiner2.js",
   "author": "Sascha Bratton <sascha@brattonbratton.com>",
   "license": "MIT",
@@ -33,5 +33,8 @@
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.17.2",
     "husky": "^0.14.3"
+  },
+  "engines": {
+    "node": ">=8.0.0"
   }
 }
