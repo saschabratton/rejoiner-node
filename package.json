@@ -1,7 +1,7 @@
 {
   "name": "rejoiner2",
   "description": "Rejoiner2 REST API client wrapper for Node.js",
-  "version": "2.9.1",
+  "version": "2.10.0",
   "main": "lib/rejoiner2.js",
   "author": "Sascha Bratton <sascha@brattonbratton.com>",
   "license": "MIT",
