@@ -1,13 +1,13 @@
 {
-  "name": "rejoiner2",
-  "description": "Rejoiner2 REST API client wrapper for Node.js",
-  "version": "2.10.1",
-  "main": "lib/rejoiner2.js",
+  "name": "rejoiner",
+  "description": "Rejoiner REST API client wrapper for Node.js",
+  "version": "2.10.2",
+  "main": "lib/rejoiner.js",
   "author": "Sascha Bratton <sascha@brattonbratton.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/saschabratton/rejoiner2-node.git"
+    "url": "git+https://github.com/saschabratton/rejoiner-node.git"
   },
   "keywords": [
     "rejoiner",

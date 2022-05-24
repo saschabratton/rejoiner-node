@@ -1,26 +1,26 @@
-# Rejoiner2 Node.js client wrapper
+# Rejoiner Node.js client wrapper
 
 ## Install
 
 ````bash
-yarn add rejoiner2
+yarn add rejoiner
 ````
 
 or
 
 ````bash
-npm install rejoiner2 --save
+npm install rejoiner --save
 ````
 
 ## Use
 
 ````js
-var Rejoiner2 = require('rejoiner2')
+var Rejoiner = require('rejoiner')
 
-var apiClient = new Rejoiner2({
-  // Your seven character Rejoiner2 Site ID
+var client = new Rejoiner({
+  // Your Site ID
   siteId: 'eXaMpLe',
-  // Your account's 40 character API key
+  // Your API key
   apiKey: 'tHiSaPiKeYiSjUsTaNeXaMpLeAnDyOuCaNtUsEiT',
 })
 ````
@@ -30,7 +30,7 @@ var apiClient = new Rejoiner2({
 The `ping` endpoint can be used to verify your credentials are working.
 
 ````js
-apiClient.verify.ping()
+client.verify.ping()
   .then(...)
   .catch(...)
 ````
@@ -40,7 +40,7 @@ apiClient.verify.ping()
 ### Convert Customer
 
 ````js
-apiClient.customer.convert({
+client.customer.convert({
   email: 'test@example.com',
   cart_data: {
     cart_value: 20000,
@@ -90,7 +90,7 @@ apiClient.customer.convert({
 ### Journey Cancellation
 
 ````js
-apiClient.customer.cancel('test@example.com')
+client.customer.cancel('test@example.com')
   .then(...)
   .catch(...)
 ````
@@ -98,7 +98,7 @@ apiClient.customer.cancel('test@example.com')
 ### Customer Unsubscribe
 
 ````js
-apiClient.customer.unsubscribe('test@example.com')
+client.customer.unsubscribe('test@example.com')
   .then(...)
   .catch(...)
 ````
@@ -106,7 +106,7 @@ apiClient.customer.unsubscribe('test@example.com')
 ### Record Explicit Customer Consent
 
 ````js
-apiClient.customer.optIn('test@example.com')
+client.customer.optIn('test@example.com')
   .then(...)
   .catch(...)
 ````
@@ -116,7 +116,7 @@ apiClient.customer.optIn('test@example.com')
 ### Email Lists
 
 ````js
-apiClient.lists.get()
+client.lists.get()
   .then(...)
   .catch(...)
 ````
@@ -124,7 +124,7 @@ apiClient.lists.get()
 ### Retrieving Listing of Contacts
 
 ````js
-apiClient.lists.contacts('eXaMpLeLiStId').get()
+client.lists.contacts('eXaMpLeLiStId').get()
   .then(...)
   .catch(...)
 ````
@@ -132,7 +132,7 @@ apiClient.lists.contacts('eXaMpLeLiStId').get()
 #### With optional page number for pagination
 
 ````js
-apiClient.lists.contacts('eXaMpLeLiStId').get(2)
+client.lists.contacts('eXaMpLeLiStId').get(2)
   .then(...)
   .catch(...)
 ````
@@ -140,7 +140,7 @@ apiClient.lists.contacts('eXaMpLeLiStId').get(2)
 ### Add Customer to List
 
 ````js
-apiClient.lists.contacts('eXaMpLeLiStId').add('test@example.com')
+client.lists.contacts('eXaMpLeLiStId').add('test@example.com')
   .then(...)
   .catch(...)
 ````
@@ -148,7 +148,7 @@ apiClient.lists.contacts('eXaMpLeLiStId').add('test@example.com')
 ### Remove Customer From List
 
 ````js
-apiClient.lists.contacts('eXaMpLeLiStId').remove('test@example.com')
+client.lists.contacts('eXaMpLeLiStId').remove('test@example.com')
   .then(...)
   .catch(...)
 ````
