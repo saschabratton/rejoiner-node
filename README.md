@@ -111,6 +111,40 @@ client.customer.optIn('test@example.com')
   .catch(...)
 ````
 
+### Customer Preference Tags
+
+### Get Preference Tags
+
+````js
+client.customer.preferenceTags.get('test@example.com')
+  .then(...)
+  .catch(...)
+````
+
+### Replace Preference Tags
+
+````js
+client.customer.preferenceTags.set('test@example.com', ['example-tag'])
+  .then(...)
+  .catch(...)
+````
+
+### Add Preference Tags
+
+````js
+client.customer.preferenceTags.add('test@example.com', ['example-tag'])
+  .then(...)
+  .catch(...)
+````
+
+### Remove Preference Tags
+
+````js
+client.customer.preferenceTags.remove('test@example.com', ['example-tag'])
+  .then(...)
+  .catch(...)
+````
+
 ## Email List Endpoints
 
 ### Email Lists
