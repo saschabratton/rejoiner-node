@@ -1,188 +1,261 @@
-# Rejoiner Node.js client wrapper
+# Rejoiner Node.js Client
+
+A Node.js client for the [Rejoiner](https://rejoiner.com) email marketing and cart abandonment platform API.
 
 ## Install
 
-````bash
-yarn add rejoiner
-````
-
-or
-
-````bash
+```bash
 npm install rejoiner --save
-````
+```
 
-## Use
+## Configuration
 
-````js
-var Rejoiner = require('rejoiner')
+```js
+const Rejoiner = require('rejoiner')
 
-var client = new Rejoiner({
-  // Your Site ID
-  siteId: 'eXaMpLe',
-  // Your API key
-  apiKey: 'tHiSaPiKeYiSjUsTaNeXaMpLeAnDyOuCaNtUsEiT',
+const client = new Rejoiner({
+  siteId: 'yourSiteId',
+  apiKey: 'yourApiKey',
+
+  // Optional
+  apiVersion: 2,              // API version: 1 (default) or 2
+  webhookSecret: 'secret',    // For webhook verification
 })
-````
+```
 
-## Ping
+### Environment Variables
 
-The `ping` endpoint can be used to verify your credentials are working.
+Configuration can also be set via environment variables:
 
-````js
+- `REJOINER_SITE_ID` - Your site ID
+- `REJOINER_API_KEY` - Your API key
+- `REJOINER_WEBHOOK_SECRET` - Webhook secret for verification (optional)
+
+```js
+// With env vars set, you can instantiate without options
+const client = new Rejoiner()
+```
+
+## Verify Credentials
+
+```js
 client.verify.ping()
-  .then(...)
-  .catch(...)
-````
+```
+
+## Webhooks
+
+Verify incoming webhook signatures:
+
+```js
+const signatureHeader = req.headers['x-rejoiner-signature']
+const payload = req.rawBody // Raw request body as string
+
+const isValid = client.verifyWebhook(signatureHeader, payload)
+```
+
+Requires `webhookSecret` to be configured.
 
 ## Customer Endpoints
 
+### Get Customer
+
+```js
+// By email (API v1 and v2)
+client.customer.get('test@example.com')
+client.customer.getByEmail('test@example.com')
+
+// By phone (API v2 only)
+client.customer.getByPhone('+15551234567')
+client.customer.get('+15551234567', 'by_phone')
+```
+
+### Update Customer
+
+```js
+client.customer.update({
+  email: 'test@example.com',
+  first_name: 'Test',
+  last_name: 'User',
+  // ... other customer fields
+})
+```
+
 ### Convert Customer
 
-````js
+```js
 client.customer.convert({
   email: 'test@example.com',
   cart_data: {
     cart_value: 20000,
     cart_item_count: 2,
     promo: 'COUPON_CODE',
-    return_url: 'https://www.example.com/return_url',
-    ...
+    return_url: 'https://www.example.com/cart',
   },
   cart_items: [
     {
-      product_id: 'example',
+      product_id: 'SKU123',
       name: 'Example Product',
       price: 10000,
-      description: 'Information about Example Product.',
-      category: [
-        'Example Category 1',
-        'Example Category 2',
-      ],
-      item_qty: 1,
-      qty_price: 10000,
+      item_qty: 2,
+      qty_price: 20000,
       product_url: 'https://www.example.com/products/example',
-      image_url: 'https://www.example.com/products/example/images/example.jpg',
-      ...
+      image_url: 'https://www.example.com/images/example.jpg',
     },
-    {
-      product_id: 'example2',
-      name: 'Example Product 2',
-      price: 10000,
-      description: 'Information about Example Product 2.',
-      category: [
-        'Example Category 2',
-        'Example Category 3',
-      ],
-      item_qty: 1,
-      qty_price: 10000,
-      product_url: 'https://www.example.com/products/example2',
-      image_url: 'https://www.example.com/products/example2/images/example.jpg',
-      ...
-    },
-    ...
   ],
 })
-  .then(...)
-  .catch(...)
-````
 
-### Journey Cancellation
+// Force conversion even if customer already converted
+client.customer.convert(data, true)
+```
 
-````js
+### Cancel Journey
+
+```js
 client.customer.cancel('test@example.com')
-  .then(...)
-  .catch(...)
-````
+```
 
-### Customer Unsubscribe
+### Unsubscribe Customer
 
-````js
+```js
 client.customer.unsubscribe('test@example.com')
-  .then(...)
-  .catch(...)
-````
+```
 
-### Record Explicit Customer Consent
+### Record Opt-In Consent
 
-````js
+```js
 client.customer.optIn('test@example.com')
-  .then(...)
-  .catch(...)
-````
+```
 
-### Customer Preference Tags
+## Customer Tags (API v2 only)
 
-### Get Preference Tags
+Manage customer tags for segmentation and journey triggers.
 
-````js
+```js
+// Get tags
+client.customer.tags.get('test@example.com')
+
+// Replace all tags
+client.customer.tags.set('test@example.com', ['vip', 'newsletter'])
+
+// Add tags
+client.customer.tags.add('test@example.com', ['new-tag'])
+
+// Remove tags
+client.customer.tags.remove('test@example.com', ['old-tag'])
+```
+
+The `set`, `add`, and `remove` methods accept an optional third parameter `startJourney` (default: `true`). Set to `false` to prevent triggering journeys:
+
+```js
+client.customer.tags.add('test@example.com', ['tag'], false)
+```
+
+## Preference Tags
+
+Manage customer preference tags for email preferences.
+
+```js
+// Get preference tags
 client.customer.preferenceTags.get('test@example.com')
-  .then(...)
-  .catch(...)
-````
 
-### Replace Preference Tags
+// Replace all preference tags
+client.customer.preferenceTags.set('test@example.com', ['weekly-digest'])
 
-````js
-client.customer.preferenceTags.set('test@example.com', ['example-tag'])
-  .then(...)
-  .catch(...)
-````
+// Add preference tags
+client.customer.preferenceTags.add('test@example.com', ['promotions'])
 
-### Add Preference Tags
+// Remove preference tags
+client.customer.preferenceTags.remove('test@example.com', ['promotions'])
+```
 
-````js
-client.customer.preferenceTags.add('test@example.com', ['example-tag'])
-  .then(...)
-  .catch(...)
-````
+## Email Lists
 
-### Remove Preference Tags
+### Get All Lists
 
-````js
-client.customer.preferenceTags.remove('test@example.com', ['example-tag'])
-  .then(...)
-  .catch(...)
-````
-
-## Email List Endpoints
-
-### Email Lists
-
-````js
+```js
 client.lists.get()
-  .then(...)
-  .catch(...)
-````
+```
 
-### Retrieving Listing of Contacts
+### Create a List
 
-````js
-client.lists.contacts('eXaMpLeLiStId').get()
-  .then(...)
-  .catch(...)
-````
+```js
+client.lists.add('My New List')
 
-#### With optional page number for pagination
+// Or with additional options
+client.lists.add({ name: 'My New List' })
+```
 
-````js
-client.lists.contacts('eXaMpLeLiStId').get(2)
-  .then(...)
-  .catch(...)
-````
+### List Contacts
 
-### Add Customer to List
+```js
+// Get contacts in a list
+client.lists.contacts('listId').get()
 
-````js
-client.lists.contacts('eXaMpLeLiStId').add('test@example.com')
-  .then(...)
-  .catch(...)
-````
+// With pagination
+client.lists.contacts('listId').get(2) // page 2
 
-### Remove Customer From List
+// Add contact to list
+client.lists.contacts('listId').add('test@example.com')
 
-````js
-client.lists.contacts('eXaMpLeLiStId').remove('test@example.com')
-  .then(...)
-  .catch(...)
-````
+// Remove contact from list
+client.lists.contacts('listId').remove('test@example.com')
+```
+
+## Journeys
+
+Trigger webhook event waits in journeys.
+
+```js
+client.journeys('journeyId').nodes('nodeId').webhook('test@example.com')
+
+// With additional data
+client.journeys('journeyId').nodes('nodeId').webhook({
+  email: 'test@example.com',
+  customer_data: { /* ... */ },
+  session_data: { /* ... */ },
+})
+```
+
+## Segments
+
+### Get Customers in Segment
+
+```js
+client.segments.customers('segmentId').get()
+```
+
+## Sessions
+
+Update session data after conversion.
+
+```js
+client.sessions.update('sessionId', {
+  paymentDate: new Date(),
+  fulfillmentDate: new Date(),
+  deliveryDate: new Date(),
+  metadata: {
+    tracking_number: '1Z999AA10123456784',
+  },
+})
+```
+
+All date fields are optional and accept `Date` objects or date strings.
+
+## API Versions
+
+Some features require API v2:
+
+| Feature | API v1 | API v2 |
+|---------|--------|--------|
+| `customer.getByPhone()` | - | Yes |
+| `customer.tags.*` | - | Yes |
+
+Set the API version when creating the client:
+
+```js
+const client = new Rejoiner({
+  siteId: 'yourSiteId',
+  apiKey: 'yourApiKey',
+  apiVersion: 2,
+})
+```
